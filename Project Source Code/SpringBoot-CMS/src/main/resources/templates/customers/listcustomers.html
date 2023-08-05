@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title></title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Shippori+Antique+B1&family=Barlow+Semi+Condensed:wght@100;200;300;400;500;600;700&family=Playfair+Display&family=Abril+Fatface&family=Josefin+Sans:wght@100;200;300;400;500;600;700&family=Italiana&family=Rasa:wght@300;400;500;600;700&family=Bodoni+Moda:ital,wght@0,500;0,600;0,700;0,800;0,900;1,400;1,500;1,600;1,700;1,800;1,900&family=Codystar:wght@300;400&family=Comfortaa:wght@300;400;500;600;700&family=Righteous&family=Sen:wght@400;700;800&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<div th:replace="fragments/navigation :: navbar"></div>
+
+<div class="container d-flex" style="padding:10px;">
+    <div class="container col-lg-6">
+        <h6><i class="bi bi-person-circle"></i> <span sec:authentication="principal.username"></span></h6>
+    </div>
+    <form action="#" th:action="@{/logout}" method="POST" class="col-lg-6 d-flex justify-content-end">
+        <button type="submit" class="btn btn-primary" style="border-width:2px;font-weight:600;border-radius:50px;"> Logout <i class="bi bi-arrow-right-circle-fill"></i></button>
+    </form>
+</div>
+
+<div th:replace="fragments/navigation :: PAGINGSORTING"></div>
+
+<br>
+<div class="container">
+    <div class="d-flex">
+        <div class="col-lg-6" sec:authorize="hasRole('MANAGER')">
+            <a class="btn btn-primary justify-content-start" th:href="@{/addCustomerForm}" style="font-weight:600;border-radius:50px;">Add Customer <i class="bi bi-person-plus-fill"></i></a>
+        </div>
+        <form class="col-lg-6 d-flex justify-content-end" action="#" th:action="@{/find}" method="GET">
+            <input class="form-control" type="number" name="findID" placeholder="Enter Customer ID to search" style="border-radius:0px;" required><br>
+            <button type="submit" class="btn btn-dark" style="border-radius:0px;"> Search</button>
+        </form>
+    </div>
+
+    <br>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+    <table class="table table-hover" style="border:1px solid grey;font-family: 'Roboto', sans-serif;">
+        <thead>
+        <tr style="font-weight:500;font-size:15px;"><th>ID</th><th>First Name</th><th>Last Name</th><th>Street</th><th>Address</th><th>City</th><th>State</th><th>Email</th><th>Phone</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+        <tr th:each="tempCustomer : ${customers.content}" style="font-size:13px;color:#616161">
+            <td th:text="${tempCustomer.id}" />
+            <td th:text="${tempCustomer.firstName}" />
+            <td th:text="${tempCustomer.lastName}" />
+            <td th:text="${tempCustomer.street}" />
+            <td th:text="${tempCustomer.address}" />
+            <td th:text="${tempCustomer.city}" />
+            <td th:text="${tempCustomer.state}" />
+            <td th:text="${tempCustomer.email}" />
+            <td th:text="${tempCustomer.phone}" />
+            <td>
+                <label sec:authorize="hasRole('MANAGER')">
+                    <a th:href="@{/updateForm(customer_id=${tempCustomer.id})}"
+                       class="btn btn-outline-success" style="font-weight:500;font-size:14px;">
+                        Update
+                    </a>
+                </label>
+
+                <a th:href="@{/deleteCustomer(customer_id=${tempCustomer.id})}"
+                   onclick="if (!(confirm('Are you sure you want to delete?'))) return false"
+                   class="btn btn-danger" style="font-weight:500;font-size:14px;">
+                    Delete
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+</body>
+</html>

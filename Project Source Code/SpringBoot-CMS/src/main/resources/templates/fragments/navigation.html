@@ -1,0 +1,46 @@
+<div th:fragment="navbar" style="background:rgba(0,0,0,0.05);padding:10px;">
+  <p class="text-center"style="font-size:20px;font-weight:600;color:#AAAAAA;font-family: 'Roboto', sans-serif;margin:0px;">ClientForge</p>
+</div>
+
+<div th:fragment="PAGINGSORTING">
+  <div class="container text-center">
+    <hr style="color:#AAAAAA;border-width:2px;margin-top:0px">
+    <!-- PAGINATION  -->
+    <div style="font-size:15px;font-weight:600;margin-left:auto;margin-right:auto;">
+      <label class="page-item" th:if="${page > 0 }">
+        <a  th:href="@{/(page=${page-1}, size=${size}, sortBy=${sortBy}, sortOrder=${sortOrder})}"><i class="bi bi-arrow-left-circle"></i> </a>
+      </label>
+      <label>PAGE No. </label> <label th:text="${page}" />
+
+      <label th:if="${page < customers.totalPages-1 }">
+        <a  th:href="@{/(page=${page+1}, size=${size}, sortBy=${sortBy}, sortOrder=${sortOrder})}"><i class="bi bi-arrow-right-circle"></i></a>
+      </label>
+    </div>
+
+    <!-- SORTING -->
+    <br>
+    <div class="col-lg-7 col-md-12"style="font-size:13px;font-weight:600;margin-left:auto;margin-right:auto;">
+      <form   th:action="@{/}" method="GET"class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6" style="padding:0px;">
+          <label >ORDER BY</label>
+          <select class="form-control" id="sortBy" name="sortBy" style="border-radius:0px;border:2px solid #EAEAEA;background:#EAEAEA;font-size:15px;">
+            <option value="id">ID</option>
+            <option value="firstName">First Name</option>
+            <option value="lastName">Last Name</option>
+            <option value="email">Email</option>
+          </select>
+
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6" style="padding:0px;">
+          <label>SORT ORDER</label>
+          <select class="form-control" id="sortOrder" name="sortOrder" style="border-radius:0px;border:2px solid blue;font-size:15px;">
+            <option value="asc">Ascending</option>
+            <option value="desc">Descending</option>
+          </select>
+        </div>
+        <button style="width:100%;border-radius:0px;"type="submit" class="btn btn-primary">Sort</button>
+      </form>
+    </div>
+  </div>
+
+</div>
